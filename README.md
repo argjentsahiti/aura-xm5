@@ -240,23 +240,36 @@ stays in playback-only mode until then.
 
 <br>
 
-## Download
+## Install
 
-Grab `Aura-1.0.zip` from [Releases][releases], unzip, drag **Aura.app** to
-Applications. It lives in the menu bar — no Dock icon, that's `LSUIElement`
-doing its job.
+```sh
+brew install --cask argjentsahiti/tap/aura
+```
 
-**macOS will refuse to open it the first time.** The app is ad-hoc signed, not
-notarized — I don't pay Apple $99/year for this. Gatekeeper flags anything
-downloaded without a Developer ID, so:
+Or grab `Aura-1.0.zip` from [Releases][releases], unzip, and drag **Aura.app**
+to Applications. Either way it lives in the menu bar — no Dock icon, that's
+`LSUIElement` doing its job.
+
+**Then clear the quarantine flag**, once:
 
 ```sh
 xattr -dr com.apple.quarantine /Applications/Aura.app
 ```
 
-Then open it normally. (Right-click → Open works too, on some macOS versions.)
+macOS will otherwise refuse to open it. The app is ad-hoc signed, not notarized —
+I don't pay Apple $99/year for this — and Gatekeeper blocks anything downloaded
+without a Developer ID. Homebrew quarantines every cask it downloads and no
+longer offers an opt-out, so this applies to the `brew` route too.
+
 If that makes you uncomfortable — reasonably — build from source instead, it
-takes about thirty seconds.
+takes about thirty seconds and skips quarantine entirely.
+
+Updating and removing:
+
+```sh
+brew upgrade --cask aura
+brew uninstall --cask aura --zap    # --zap also deletes settings and logs
+```
 
 macOS asks for Bluetooth permission on first launch. Approve it once.
 
