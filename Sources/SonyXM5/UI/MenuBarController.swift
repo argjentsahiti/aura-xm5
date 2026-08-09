@@ -10,6 +10,7 @@ final class MenuBarController: NSObject {
     private let login: LoginItem
     private let mic: MicController
     private let notifier: Notifier
+    private let updater: Updater
     private var cancellables = Set<AnyCancellable>()
 
     /// NSPopover rather than a hand-rolled NSPanel.
@@ -32,18 +33,19 @@ final class MenuBarController: NSObject {
     }()
 
     private var rootView: some View {
-        HUDView(hp: headphones, modes: modes, login: login, mic: mic, notifier: notifier) {
+        HUDView(hp: headphones, modes: modes, login: login, mic: mic, notifier: notifier, updater: updater) {
             NSApp.terminate(nil)
         }
     }
 
     init(headphones: Headphones, modes: ModeStore, login: LoginItem,
-         mic: MicController, notifier: Notifier) {
+         mic: MicController, notifier: Notifier, updater: Updater) {
         self.headphones = headphones
         self.modes = modes
         self.login = login
         self.mic = mic
         self.notifier = notifier
+        self.updater = updater
         self.statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         super.init()
 

@@ -2,31 +2,31 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleName</key>
-	<string>Aura</string>
 	<key>CFBundleDisplayName</key>
 	<string>Aura</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.github.argjentsahiti.aura</string>
 	<key>CFBundleExecutable</key>
 	<string>SonyXM5</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
 	<key>CFBundleIconFile</key>
 	<string>Aura</string>
 	<key>CFBundleIconName</key>
 	<string>Aura</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.github.argjentsahiti.aura</string>
+	<key>CFBundleName</key>
+	<string>Aura</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>2</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>14.0</string>
 	<key>LSUIElement</key>
 	<true/>
-	<key>NSHighResolutionCapable</key>
-	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>Aura connects to your Sony WH-1000XM5 to control noise cancelling, ambient sound and the equalizer.</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
 </dict>
 </plist>

@@ -24,6 +24,7 @@ struct HUDView: View {
     @ObservedObject var login: LoginItem
     @ObservedObject var mic: MicController
     @ObservedObject var notifier: Notifier
+    @ObservedObject var updater: Updater
     var onQuit: () -> Void
 
     @State private var pane: Pane = .home
@@ -390,6 +391,10 @@ struct HUDView: View {
 
             Divider().overlay(Design.hairline)
 
+            updateRow
+
+            Divider().overlay(Design.hairline)
+
             HStack(spacing: 10) {
                 if let model = hp.modelCode {
                     Text("Model \(model)")
@@ -397,10 +402,56 @@ struct HUDView: View {
                         .foregroundStyle(.tertiary)
                 }
                 Spacer(minLength: 0)
+                QuietButton(title: "Welcome") { WelcomeWindow.show() }
                 QuietButton(title: "Reconnect") { hp.reconnect(); hp.refresh() }
                 QuietButton(title: "Quit", action: onQuit)
             }
         }
+    }
+
+    private var updateRow: some View {
+        VStack(alignment: .leading, spacing: 7) {
+            settingRow("Check for Updates", "Once a day, in the background",
+                       isOn: updater.automaticallyCheck) { updater.automaticallyCheck = $0 }
+
+            HStack(spacing: 8) {
+                switch updater.status {
+                case .checking:
+                    Text("Checking…")
+                        .font(.system(size: 10)).foregroundStyle(.tertiary)
+                case .upToDate:
+                    Text("Aura \(updater.currentVersion) is the latest version")
+                        .font(.system(size: 10)).foregroundStyle(.tertiary)
+                case .available(let version, _):
+                    Text("Version \(version) available")
+                        .font(.system(size: 10, weight: .medium))
+                        .foregroundStyle(Design.accent)
+                    QuietButton(title: updater.installedViaHomebrew ? "Copy Command" : "Download") {
+                        if updater.installedViaHomebrew { updater.copyUpdateCommand() }
+                        else { updater.openReleasePage() }
+                    }
+                case .failed(let reason):
+                    Text(reason)
+                        .font(.system(size: 10)).foregroundStyle(.tertiary)
+                        .lineLimit(1)
+                case .idle:
+                    Text("Aura \(updater.currentVersion)")
+                        .font(.system(size: 10)).foregroundStyle(.tertiary)
+                }
+
+                Spacer(minLength: 0)
+                QuietButton(title: "Check Now") { updater.check() }
+            }
+
+            if case .available = updater.status, updater.installedViaHomebrew {
+                Text(updater.updateInstruction)
+                    .font(.system(size: 10, design: .monospaced))
+                    .foregroundStyle(.secondary)
+                    .padding(.horizontal, 7).padding(.vertical, 4)
+                    .background(RoundedRectangle(cornerRadius: 5).fill(Design.fill))
+            }
+        }
+        .animation(Design.quick, value: updater.status)
     }
 
     // MARK: - Shared
