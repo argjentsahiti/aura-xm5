@@ -1,0 +1,6 @@
+.build/
+*.app/
+Resources/Aura.iconset/
+.DS_Store
+*.xcuserdatad
+dist/
