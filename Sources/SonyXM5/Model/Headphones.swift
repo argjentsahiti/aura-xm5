@@ -192,6 +192,12 @@ final class Headphones: ObservableObject {
         write(eq: .flat)
     }
 
+    func apply(preset: EQPreset) {
+        // Any band write drops the device into its Custom slot, so the preset
+        // byte stays 0xA0 regardless — the curve is what carries the identity.
+        write(eq: EQState(preset: 0xA0, bands: preset.bands))
+    }
+
     func setDSEE(_ on: Bool) {
         dsee = on
         guard isConnected else { return }

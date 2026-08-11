@@ -218,7 +218,11 @@ struct HUDView: View {
     }
 
     private var isFlat: Bool { hp.eq.bands.allSatisfy { $0 == 10 } }
-    private var eqSummary: String { isFlat ? "Flat" : "Custom" }
+
+    /// Names the curve when it matches a preset, so the row reads "Jazz" rather
+    /// than a uselessly generic "Custom".
+    private var matchedPreset: EQPreset? { EQPreset.preset(matching: hp.eq.bands) }
+    private var eqSummary: String { matchedPreset?.name ?? "Custom" }
 
     /// Stays visible but inert unless Ambient is selected — a control that
     /// vanishes teaches nothing; one that greys out shows what enables it.
@@ -266,6 +270,53 @@ struct HUDView: View {
 
     private var equalizerPane: some View {
         VStack(alignment: .leading, spacing: 14) {
+            SectionLabel("Preset")
+
+            Menu {
+                ForEach(EQPreset.Group.allCases, id: \.rawValue) { group in
+                    Section(group.rawValue) {
+                        ForEach(EQPreset.grouped(group)) { preset in
+                            Button {
+                                hp.apply(preset: preset)
+                            } label: {
+                                // A checkmark reads as current selection without
+                                // needing a separate label.
+                                if matchedPreset?.id == preset.id {
+                                    Label(preset.name, systemImage: "checkmark")
+                                } else {
+                                    Text(preset.name)
+                                }
+                            }
+                        }
+                    }
+                }
+            } label: {
+                HStack(spacing: 6) {
+                    Text(matchedPreset?.name ?? "Custom")
+                        .font(.system(size: 12, weight: .medium))
+                        .foregroundStyle(.primary)
+                    Spacer(minLength: 0)
+                    Image(systemName: "chevron.up.chevron.down")
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(.tertiary)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 7)
+                .background(
+                    RoundedRectangle(cornerRadius: 9, style: .continuous).fill(Design.fill)
+                )
+            }
+            .menuStyle(.borderlessButton)
+            .menuIndicator(.hidden)
+            .fixedSize(horizontal: false, vertical: true)
+
+            Text(matchedPreset?.detail ?? "Hand-tuned curve")
+                .font(.system(size: 10))
+                .foregroundStyle(.tertiary)
+                .fixedSize(horizontal: false, vertical: true)
+
+            Divider().overlay(Design.hairline)
+
             SectionLabel("Bands") {
                 // Nothing to reset when every band already sits at the detent.
                 if !isFlat {
@@ -283,10 +334,9 @@ struct HUDView: View {
                 }
             }
 
-            Text("Clear Bass is the low shelf; the rest are graphic bands. Adjusting any band switches the headphones to their Custom preset.")
+            Text("Clear Bass is a low shelf — the only control below 400 Hz.")
                 .font(.system(size: 10))
                 .foregroundStyle(.tertiary)
-                .fixedSize(horizontal: false, vertical: true)
         }
     }
 

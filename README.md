@@ -220,7 +220,9 @@ or change something in Sony's app.
   Meeting, Focus, Commute, Music, Outdoors, plus your own: adjust anything and a
   *Save Current* affordance appears.
 - **Ambient Sound** — NC / Off / Ambient, 1–20 level, Focus on Voice.
-- **Equalizer** — six bands with a centre detent, in the correct order.
+- **Equalizer** — six bands with a centre detent, in the correct order, plus 15
+  presets: a neutral *Reference*, eight genre curves, and character options like
+  *Late Night* (loudness compensation) and *Voice*. See the caveat below.
 - **Playback** — volume, DSEE Extreme, power-off-when-removed.
 - **Microphone** — level and mute for the headset input.
 - **Alerts** — connect, disconnect, battery thresholds, charging, full. All
